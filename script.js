@@ -453,6 +453,7 @@ document.addEventListener("DOMContentLoaded", () => {
     `);
             makers.push(marker);
 
+            const originalIndex = locations.indexOf(loc);
             const li = document.createElement("li");
             li.innerHTML = `
         <strong>${loc.name}</strong><br>

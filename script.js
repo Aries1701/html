@@ -16,12 +16,13 @@
 //     filterSheet.classList.toggle("active");
 // });
 const sheet = document.getElementById("bottomSheet");
-const header = sheet.querySelector(".sheet-header");
+const header = document.getElementById("sheetHeader");
 
 let startY = 0;
-let currentY = 0;
+let endY = 0;
 let dragging = false;
 
+/* chỉ kéo ở header */
 header.addEventListener("touchstart", e => {
     dragging = true;
     startY = e.touches[0].clientY;
@@ -30,7 +31,7 @@ header.addEventListener("touchstart", e => {
 
 document.addEventListener("touchmove", e => {
     if (!dragging) return;
-    currentY = e.touches[0].clientY;
+    endY = e.touches[0].clientY;
     e.preventDefault();
 }, { passive: false });
 
@@ -38,23 +39,27 @@ document.addEventListener("touchend", () => {
     if (!dragging) return;
     dragging = false;
 
-    const diff = startY - currentY;
+    const diff = startY - endY;
 
     if (diff > 70) {
         if (sheet.classList.contains("mini")) {
-            sheet.className = "bottom-sheet half";
+            sheet.className = "gm-bottom-sheet half";
         } else {
-            sheet.className = "bottom-sheet full";
+            sheet.className = "gm-bottom-sheet full";
         }
     } else if (diff < -70) {
         if (sheet.classList.contains("full")) {
-            sheet.className = "bottom-sheet half";
+            sheet.className = "gm-bottom-sheet half";
         } else {
-            sheet.className = "bottom-sheet mini";
+            sheet.className = "gm-bottom-sheet mini";
         }
     }
 });
 
+/* click header mở half */
+header.addEventListener("click", () => {
+    sheet.className = "gm-bottom-sheet half";
+});
 
 
 
@@ -134,8 +139,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }).addTo(map);
 
     map.on("mousedown touchstart dragstart", () => {
-        sheet.className = "bottom-sheet mini";
+        sheet.className = "gm-bottom-sheet mini";
     });
+
 
     const locations = [
         {
@@ -413,13 +419,13 @@ document.addEventListener("DOMContentLoaded", () => {
         🛠️${loc.services}<br>
         ⭐ ${loc.rating}
     
-      `;
+//       `;
 
             li.onclick = () => {
-                map.setView([loc.lat, loc.lng], 15);
-                marker.openPopup();
-                sheet.className = "bottom-sheet half";
+                map.setView([location.lat, location.lng], 15);
+                sheet.className = "gm-bottom-sheet half";
             };
+
 
 
             locationList.appendChild(li);

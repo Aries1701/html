@@ -159,103 +159,105 @@ html, body {
 
 
 /* ========== BOTTOM SHEET ========== */
-.bottom-sheet {
+.gm-bottom-sheet {
   position: fixed;
   left: 0;
   right: 0;
   bottom: 0;
-  height: 85vh;
+  height: 88vh;
   background: #fff;
   border-radius: 18px 18px 0 0;
-  box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.25);
-  transition: transform 0.28s ease;
+  box-shadow: 0 -6px 24px rgba(0,0,0,.25);
   z-index: 1000;
   display: flex;
   flex-direction: column;
+  transition: transform .28s ease;
   touch-action: none;
 }
 
 /* ===== STATES ===== */
 
 /* MINI – chỉ tiêu đề */
-.bottom-sheet.mini {
+.gm-bottom-sheet.mini {
   transform: translateY(calc(100% - 56px));
 }
 
-.bottom-sheet.mini .sheet-content {
+.gm-bottom-sheet.mini .gm-content {
   display: none;
 }
 
-.bottom-sheet.mini .sheet-handle {
+.gm-bottom-sheet.mini .gm-handle {
   display: none;
 }
 
 /* HALF – 1 item */
-.bottom-sheet.half {
+.gm-bottom-sheet.half {
   transform: translateY(55%);
 }
 
-.bottom-sheet.half .sheet-content {
+.gm-bottom-sheet.half .gm-content {
   overflow: hidden;
 }
 
-.bottom-sheet.half #location-list li {
+.gm-bottom-sheet.half #location-list li {
   display: none;
 }
 
-.bottom-sheet.half #location-list li:first-child {
+.gm-bottom-sheet.half #location-list li:first-child {
   display: block;
 }
 
 /* FULL – full list */
-.bottom-sheet.full {
+.gm-bottom-sheet.full {
   transform: translateY(0);
 }
 
-.bottom-sheet.full .sheet-content {
+.gm-bottom-sheet.full .gm-content {
   overflow-y: auto;
 }
 
 /* ===== UI ===== */
 
-.sheet-handle {
-  width: 40px;
+.gm-handle {
+  width: 42px;
   height: 5px;
   background: #ccc;
   border-radius: 3px;
   margin: 10px auto 6px;
 }
 
-.sheet-header {
+.gm-header {
   padding: 10px 16px;
   border-bottom: 1px solid #eee;
   text-align: center;
 }
 
-.sheet-header h2 {
+.gm-header h2 {
+  margin: 0;
   font-size: 15px;
   font-weight: 600;
-  margin: 0;
+  color: #111;
 }
 
-/* ===== LIST ===== */
+/* ===== CARD STYLE ===== */
 
 #location-list li {
   list-style: none;
+  margin: 12px;
   padding: 14px;
-  margin-bottom: 10px;
-  border-radius: 12px;
+  border-radius: 14px;
   background: #f7f7f7;
-  transition: background 0.2s;
+  box-shadow: 0 2px 6px rgba(0,0,0,.08);
 }
-
-/* #location-list li:hover {
-  background: #eaeaea;
-} */
 
 #location-list strong {
   font-size: 15px;
 }
+
+
+
+
+
 
 
 

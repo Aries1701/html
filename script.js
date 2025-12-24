@@ -460,8 +460,8 @@ document.addEventListener("DOMContentLoaded", () => {
 		<strong><span style="color: green;">Giá trung bình: ${loc.price} VNĐ</span></strong><br>
         🛠️${loc.services}<br>
         ⭐ ${loc.rating}
-    
-//       `;
+        <button onclick="focusMap(${originalIndex})">Xem trên bản đồ</button>
+       `;
 
             li.onclick = () => {
                 map.setView([location.lat, location.lng], 15);

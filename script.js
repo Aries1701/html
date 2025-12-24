@@ -16,49 +16,47 @@
 //     filterSheet.classList.toggle("active");
 // });
 const sheet = document.getElementById("bottomSheet");
-const handle = sheet.querySelector(".sheet-handle");
 const header = sheet.querySelector(".sheet-header");
 
 let startY = 0;
 let currentY = 0;
 let dragging = false;
 
-[handle, header].forEach(el => {
-  el.addEventListener("touchstart", e => {
+header.addEventListener("touchstart", e => {
     dragging = true;
     startY = e.touches[0].clientY;
     e.stopPropagation();
-  });
 });
 
 document.addEventListener("touchmove", e => {
-  if (!dragging) return;
-  currentY = e.touches[0].clientY;
-  e.preventDefault(); // 🔥 chặn scroll trang
+    if (!dragging) return;
+    currentY = e.touches[0].clientY;
+    e.preventDefault();
 }, { passive: false });
 
 document.addEventListener("touchend", () => {
-  if (!dragging) return;
-  dragging = false;
+    if (!dragging) return;
+    dragging = false;
 
-  const diff = startY - currentY;
+    const diff = startY - currentY;
 
-  if (diff > 80) {
-    // kéo lên
-    if (sheet.classList.contains("collapsed")) {
-      sheet.className = "bottom-sheet half";
-    } else {
-      sheet.className = "bottom-sheet full";
+    if (diff > 70) {
+        if (sheet.classList.contains("mini")) {
+            sheet.className = "bottom-sheet half";
+        } else {
+            sheet.className = "bottom-sheet full";
+        }
+    } else if (diff < -70) {
+        if (sheet.classList.contains("full")) {
+            sheet.className = "bottom-sheet half";
+        } else {
+            sheet.className = "bottom-sheet mini";
+        }
     }
-  } else if (diff < -80) {
-    // kéo xuống
-    if (sheet.classList.contains("full")) {
-      sheet.className = "bottom-sheet half";
-    } else {
-      sheet.className = "bottom-sheet collapsed";
-    }
-  }
 });
+
+
+
 
 
 
@@ -134,6 +132,10 @@ document.addEventListener("DOMContentLoaded", () => {
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         attribution: '© OpenStreetMap contributors',
     }).addTo(map);
+
+    map.on("mousedown touchstart dragstart", () => {
+        sheet.className = "bottom-sheet mini";
+    });
 
     const locations = [
         {
@@ -416,7 +418,9 @@ document.addEventListener("DOMContentLoaded", () => {
             li.onclick = () => {
                 map.setView([loc.lat, loc.lng], 15);
                 marker.openPopup();
+                sheet.className = "bottom-sheet half";
             };
+
 
             locationList.appendChild(li);
         });

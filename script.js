@@ -15,79 +15,92 @@
 // document.querySelector(".dropdown-toggle").addEventListener("click", () => {
 //     filterSheet.classList.toggle("active");
 // });
-const sheet = document.getElementById("bottomSheet");
+function disableMap() {
+    if (!window.map) return;
+    map.dragging.disable();
+    map.touchZoom.disable();
+    map.doubleClickZoom.disable();
+    map.scrollWheelZoom.disable();
+}
+
+function enableMap() {
+    if (!window.map) return;
+    map.dragging.enable();
+    map.touchZoom.enable();
+    map.doubleClickZoom.enable();
+    map.scrollWheelZoom.enable();
+}
+
+
+
+
+
+
+
+
+
+const sheet = document.getElementById("sheet");
 const header = document.getElementById("sheetHeader");
 
+const SNAP = {
+    mini: window.innerHeight * 0.7,
+    half: window.innerHeight * 0.4,
+    full: window.innerHeight * 0.05,
+};
+
 let startY = 0;
-let endY = 0;
+let startTranslate = 0;
+let currentTranslate = SNAP.mini;
 let dragging = false;
 
-/* chỉ kéo ở header */
+function setTranslate(y) {
+    currentTranslate = Math.max(SNAP.full, Math.min(SNAP.mini, y));
+    sheet.style.transform = `translateY(${currentTranslate}px)`;
+}
+
 header.addEventListener("touchstart", e => {
     dragging = true;
+    sheet.classList.add("dragging");
+
     startY = e.touches[0].clientY;
+    startTranslate = currentTranslate;
+
+    // khóa map
+    map.dragging.disable();
+    map.touchZoom.disable();
+
     e.stopPropagation();
 });
 
-document.addEventListener("touchmove", e => {
-    if (!dragging) return;
-    endY = e.touches[0].clientY;
-    e.preventDefault();
-}, { passive: false });
+document.addEventListener(
+    "touchmove",
+    e => {
+        if (!dragging) return;
+        const delta = e.touches[0].clientY - startY;
+        setTranslate(startTranslate + delta);
+        e.preventDefault();
+    },
+    { passive: false }
+);
 
 document.addEventListener("touchend", () => {
     if (!dragging) return;
     dragging = false;
+    sheet.classList.remove("dragging");
 
-    const diff = startY - endY;
+    // snap
+    const distances = Object.values(SNAP);
+    const closest = distances.reduce((a, b) =>
+        Math.abs(b - currentTranslate) < Math.abs(a - currentTranslate) ? b : a
+    );
 
-    if (diff > 70) {
-        if (sheet.classList.contains("mini")) {
-            sheet.className = "gm-bottom-sheet half";
-        } else {
-            sheet.className = "gm-bottom-sheet full";
-        }
-    } else if (diff < -70) {
-        if (sheet.classList.contains("full")) {
-            sheet.className = "gm-bottom-sheet half";
-        } else {
-            sheet.className = "gm-bottom-sheet mini";
-        }
-    }
+    setTranslate(closest);
+
+    // mở lại map
+    map.dragging.enable();
+    map.touchZoom.enable();
 });
 
-/* click header mở half */
-header.addEventListener("click", () => {
-    sheet.className = "gm-bottom-sheet half";
-});
-
-let draggingSheet = false;
-
-header.addEventListener("touchstart", e => {
-  draggingSheet = true;
-  startY = e.touches[0].clientY;
-
-  map.dragging.disable();
-  map.scrollWheelZoom.disable();
-  map.touchZoom.disable();
-  map.doubleClickZoom.disable();
-
-  e.stopPropagation();
-});
-
-document.addEventListener("touchmove", e => {
-  if (!draggingSheet) return;
-  e.preventDefault(); // 🔥 CHỐT HẠ
-}, { passive: false });
-
-document.addEventListener("touchend", () => {
-  if (!draggingSheet) return;
-  draggingSheet = false;
-
-  map.dragging.enable();
-  map.touchZoom.enable();
-  map.doubleClickZoom.enable();
-});
 
 
 
@@ -160,14 +173,15 @@ toggle.addEventListener("click", (e) => {
 
 
 document.addEventListener("DOMContentLoaded", () => {
-    const map = L.map("map").setView([21.0285, 105.8542], 13); // Hà Nội
+    window.map = L.map("map").setView([21.0285, 105.8542], 13); // Hà Nội
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         attribution: '© OpenStreetMap contributors',
     }).addTo(map);
 
-    map.on("touchstart mousedown", () => {
-  sheet.className = "gm-bottom-sheet mini";
-});
+    map.on("mousedown touchstart", () => {
+        setTranslate(SNAP.mini);
+    });
+
 
 
 

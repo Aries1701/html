@@ -60,15 +60,6 @@ document.addEventListener("touchend", () => {
   }
 });
 
-map.on("mousedown touchstart dragstart", () => {
-  sheet.className = "bottom-sheet mini";
-});
-header.addEventListener("click", () => {
-  sheet.className = "bottom-sheet half";
-});
-marker.on("click", () => {
-  sheet.className = "bottom-sheet half";
-});
 
 
 

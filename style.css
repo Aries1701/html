@@ -239,18 +239,6 @@ html, body {
   touch-action: none; /* cực kỳ quan trọng */
 }
 
-.bottom-sheet.mini {
-  transform: translateY(calc(100% - 48px));
-}
-
-.bottom-sheet.mini .sheet-content {
-  display: none;
-}
-
-.bottom-sheet.mini .sheet-header {
-  padding: 8px 16px;
-  text-align: center;
-}
 
 
 

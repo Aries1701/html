@@ -12,7 +12,11 @@ html, body {
   height: 100vh;
   width: 100%;
   z-index: 1;
+  touch-action: pan-x pan-y;
+  pointer-events: auto;
 }
+
+
 
 /* ========== SEARCH BAR ========== */
 .search-bar {
@@ -172,7 +176,8 @@ html, body {
   display: flex;
   flex-direction: column;
   transition: transform .28s ease;
-  touch-action: none;
+  /* touch-action: none; */
+  touch-action: pan-y;
 }
 
 /* ===== STATES ===== */
@@ -210,6 +215,7 @@ html, body {
 /* FULL – full list */
 .gm-bottom-sheet.full {
   transform: translateY(0);
+  pointer-events: auto;
 }
 
 .gm-bottom-sheet.full .gm-content {
@@ -300,6 +306,8 @@ html, body {
 
 
 html, body {
-  overscroll-behavior: none; /* chặn reload khi kéo */
-  touch-action: manipulation;
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none; /* chặn pull-to-refresh */
 }
+

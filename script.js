@@ -61,6 +61,33 @@ header.addEventListener("click", () => {
     sheet.className = "gm-bottom-sheet half";
 });
 
+let draggingSheet = false;
+
+header.addEventListener("touchstart", e => {
+  draggingSheet = true;
+  startY = e.touches[0].clientY;
+
+  map.dragging.disable();
+  map.scrollWheelZoom.disable();
+  map.touchZoom.disable();
+  map.doubleClickZoom.disable();
+
+  e.stopPropagation();
+});
+
+document.addEventListener("touchmove", e => {
+  if (!draggingSheet) return;
+  e.preventDefault(); // 🔥 CHỐT HẠ
+}, { passive: false });
+
+document.addEventListener("touchend", () => {
+  if (!draggingSheet) return;
+  draggingSheet = false;
+
+  map.dragging.enable();
+  map.touchZoom.enable();
+  map.doubleClickZoom.enable();
+});
 
 
 
@@ -138,9 +165,10 @@ document.addEventListener("DOMContentLoaded", () => {
         attribution: '© OpenStreetMap contributors',
     }).addTo(map);
 
-    map.on("mousedown touchstart dragstart", () => {
-        sheet.className = "gm-bottom-sheet mini";
-    });
+    map.on("touchstart mousedown", () => {
+  sheet.className = "gm-bottom-sheet mini";
+});
+
 
 
     const locations = [

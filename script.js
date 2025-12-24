@@ -16,18 +16,31 @@
 //     filterSheet.classList.toggle("active");
 // });
 const sheet = document.getElementById("bottomSheet");
+const handle = sheet.querySelector(".sheet-handle");
+const header = sheet.querySelector(".sheet-header");
+
 let startY = 0;
 let currentY = 0;
+let dragging = false;
 
-sheet.addEventListener("touchstart", e => {
-  startY = e.touches[0].clientY;
+[handle, header].forEach(el => {
+  el.addEventListener("touchstart", e => {
+    dragging = true;
+    startY = e.touches[0].clientY;
+    e.stopPropagation();
+  });
 });
 
-sheet.addEventListener("touchmove", e => {
+document.addEventListener("touchmove", e => {
+  if (!dragging) return;
   currentY = e.touches[0].clientY;
-});
+  e.preventDefault(); // 🔥 chặn scroll trang
+}, { passive: false });
 
-sheet.addEventListener("touchend", () => {
+document.addEventListener("touchend", () => {
+  if (!dragging) return;
+  dragging = false;
+
   const diff = startY - currentY;
 
   if (diff > 80) {
@@ -46,6 +59,17 @@ sheet.addEventListener("touchend", () => {
     }
   }
 });
+
+map.on("mousedown touchstart dragstart", () => {
+  sheet.className = "bottom-sheet mini";
+});
+header.addEventListener("click", () => {
+  sheet.className = "bottom-sheet half";
+});
+marker.on("click", () => {
+  sheet.className = "bottom-sheet half";
+});
+
 
 
 

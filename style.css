@@ -50,7 +50,7 @@ html, body {
 /* ========== FILTER BAR ========== */
 .chips {
   position: fixed;
-  top: 90px;
+  top: 70px;
   left: 12px;
   right: 12px;
   display: flex;
